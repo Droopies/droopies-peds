@@ -6,7 +6,7 @@ end)
 
 function GetNPC(id)
     if not handler:npcExists(id) then return end
-    return handler.peds[id]['peds']
+    return handler.peds[id]['npc']
 end
 
 exports('GetNPC', GetNPC)
@@ -19,9 +19,9 @@ function RegisterNPC(data)
 
         return npc
     else
-        handler.peds[data.id]['peds']['position'] = data.position
+        handler.peds[data.id]['npc']['position'] = data.position
 
-        return handler.peds[data.id]['peds']
+        return handler.peds[data.id]['npc']
     end
 end
 
@@ -50,7 +50,7 @@ exports('EnableNPC', EnableNPC)
 
 function UpdateNPCData(id, key, value)
     if not handler:npcExists(id) then return end
-    handler.peds[id]['peds'][key] = value
+    handler.peds[id]['npc'][key] = value
 end
 
 exports('UpdateNPCData', UpdateNPCData)
