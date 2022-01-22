@@ -6,22 +6,22 @@ end)
 
 function GetNPC(id)
     if not handler:npcExists(id) then return end
-    return handler.peds[id]['peds']
+    return handler.peds[id]['npc']
 end
 
 exports('GetNPC', GetNPC)
 
 function RegisterNPC(data)
     if not handler:npcExists(data.id) then
-        local npc = Ped:new(data.id, data.pedType, data.model, data.position, (type(data.appearance) == 'string' and json.decode(data.appearance) or data.appearance), data.animation, data.networked, data.settings, data.flags, data.scenario, data.blip)
+        local npc = Ped:new(data.id, data.pedType, data.model, data.position, (type(data.appearance) == 'string' and json.decode(data.appearance) or data.appearance), data.animation, data.networked, data.settings, data.qtarget, data.flags, data.scenario, data.blip)
 
         handler:addNPC(npc, data.distance)
 
         return npc
     else
-        handler.peds[data.id]['peds']['position'] = data.position
+        handler.peds[data.id]['npc']['position'] = data.position
 
-        return handler.peds[data.id]['peds']
+        return handler.peds[data.id]['npc']
     end
 end
 
@@ -50,7 +50,7 @@ exports('EnableNPC', EnableNPC)
 
 function UpdateNPCData(id, key, value)
     if not handler:npcExists(id) then return end
-    handler.peds[id]['peds'][key] = value
+    handler.peds[id]['npc'][key] = value
 end
 
 exports('UpdateNPCData', UpdateNPCData)
@@ -72,6 +72,6 @@ AddEventHandler('onResourceStop', function(resourceName)
     if resourceName ~= GetCurrentResourceName() then return end
 
     for _, data in pairs(handler.peds) do
-        data['peds']:delete()
+        data['npc']:delete()
     end
 end)

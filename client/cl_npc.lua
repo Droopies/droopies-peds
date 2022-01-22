@@ -3,7 +3,7 @@ Ped = {}
 DecorRegister('NPC', 2)
 DecorRegister('NPC_ID', 3)
 
-function Ped:new(id, pedType, model, position, appearance, animation, networked, settings, flags, scenario, blip)
+function Ped:new(id, pedType, model, position, appearance, animation, networked, settings, qtarget, flags, scenario, blip)
     local this = {}
 
     this.id = id
@@ -14,6 +14,7 @@ function Ped:new(id, pedType, model, position, appearance, animation, networked,
     this.animation = animation
     this.networked = networked
     this.settings = settings
+    this.qtarget = qtarget
     this.flags = flags
     this.scenario = scenario
     this.blip = blip
@@ -59,6 +60,24 @@ function Ped:spawn()
         if self.scenario then
             self:setScenario()
         end
+        
+        if self.qtarget then 
+            exports['qtarget']:AddBoxZone(
+            self.entity,
+            self.position.coords,
+            2,
+            2,
+            {
+            name="TaxiNPC",
+            heading=self.position.heading + 0.0,
+            debugPoly=false,
+            minZ=self.position.coords.z - 2,
+            maxZ=self.position.coords.z + 2,
+            },{
+                options = self.qtarget.options,
+                distance = self.qtarget.distance
+            })
+        end
     end
 
     SetModelAsNoLongerNeeded(self.model)
@@ -68,7 +87,9 @@ function Ped:delete()
     if not self.spawned then return end
 
     self.spawned = false
-
+    if self.qtarget then
+            exports['qtarget']:RemoveTargetEntity(self.entity,self.qtarget.options)
+    end
     if DoesEntityExist(self.entity) then
         DeleteEntity(self.entity)
     end
