@@ -17,7 +17,7 @@ end
 
 function PedHandlers:getNPCByID(id)
     if self:npcExists(id) then
-        return self.peds[id]['peds']
+        return self.peds[id]['npc']
     end
 end
 
@@ -38,10 +38,10 @@ end
 function PedHandlers:removeNPC(id)
     if not self:npcExists(id) then return end
 
-    self.peds[id]['peds']:delete()
+    self.peds[id]['npc']:delete()
 
-    if self.peds[id]['peds'].blipHandler then
-        self.peds[id]['peds'].blipHandler:delete()
+    if self.peds[id]['npc'].blipHandler then
+        self.peds[id]['npc'].blipHandler:delete()
     end
 
     self.peds[id] = nil
@@ -50,17 +50,17 @@ end
 function PedHandlers:disableNPC(id)
     if not self:npcExists(id) then return end
 
-    if self.peds[id]['peds'].blipHandler then
-        self.peds[id]['peds'].blipHandler:delete()
+    if self.peds[id]['npc'].blipHandler then
+        self.peds[id]['npc'].blipHandler:delete()
     end
 
-    self.peds[id]['peds']:disable()
+    self.peds[id]['npc']:disable()
 end
 
 function PedHandlers:enableNPC(id)
     if not self:npcExists(id) then return end
-    self.peds[id]['peds']:enable()
-    local currentNPC = self.peds[id]['peds']
+    self.peds[id]['npc']:enable()
+    local currentNPC = self.peds[id]['npc']
 
     if currentNPC and currentNPC.blip then
         local blipHandler = Blip:new(currentNPC.position.coords, currentNPC.blip)
